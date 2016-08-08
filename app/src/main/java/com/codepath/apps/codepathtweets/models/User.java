@@ -42,6 +42,23 @@ public class User extends Model {
     @Column(name = "profileImageUrl")
     private String profileImageUrl;
 
+    String tagline;
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFollowingsCount() {
+        return followingsCount;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    int followersCount;
+    int followingsCount;
+
     //
     public static User fromJSON(JSONObject jsonObject) {
         User u = new User();
@@ -50,6 +67,9 @@ public class User extends Model {
             u.uid = jsonObject.getLong("id");
             u.screeName = jsonObject.getString("screen_name");
             u.profileImageUrl = jsonObject.getString("profile_image_url");
+            u.tagline = jsonObject.getString("description");
+            u.followersCount = jsonObject.getInt("followers_count");
+            u.followingsCount = jsonObject.getInt("friends_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }
