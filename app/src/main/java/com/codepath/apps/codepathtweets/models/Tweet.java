@@ -1,15 +1,11 @@
 package com.codepath.apps.codepathtweets.models;
 
-import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +21,7 @@ import java.util.Locale;
  */
 
 // Parse the JSON + store the data, encapsulate state logic or display logic
-@Table(name = "tweets", id = BaseColumns._ID)
+//@Table(name = "tweets", id = BaseColumns._ID)
 public class Tweet extends Model implements Parcelable {
     // list out the attributes
     @Column(name = "body")
@@ -78,7 +74,7 @@ public class Tweet extends Model implements Parcelable {
             this.body = object.getString("text");
             this.uid = object.getLong("id");
 //            tweet.createdAt = jsonObject.getString("created_at");
-            this.userId = User.findOrCreateFromJson(object.getJSONObject("user")).getUid();
+            this.user = User.fromJSON(object.getJSONObject("user"));
 
             String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
             SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -127,8 +123,7 @@ public class Tweet extends Model implements Parcelable {
         try {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
-//            tweet.createdAt = jsonObject.getString("created_at");
-            tweet.userId = User.findOrCreateFromJson(jsonObject.getJSONObject("user")).getUid();
+            tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
 
             String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
             SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -138,37 +133,12 @@ public class Tweet extends Model implements Parcelable {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-//            tweet.createdAt = jsonObject.getString("created_at");
-//            tweet.user = User.findOrCreateFromJson(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        // tweet.user =
-        tweet.save();
         return tweet;
     }
-
-//    public static ArrayList<Tweet> fromJson(JSONArray jsonArray) {
-//        ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());
-//
-//        for (int i=0; i < jsonArray.length(); i++) {
-//            JSONObject tweetJson = null;
-//            try {
-//                tweetJson = jsonArray.getJSONObject(i);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                continue;
-//            }
-//
-//            Tweet tweet = new Tweet(tweetJson);
-//            tweet.save();
-//            Log.d("TWITTER", tweet.getBody());
-//            tweets.add(tweet);
-//        }
-//
-//        return tweets;
-//    }
 
     public static ArrayList<Tweet> fromJson(JSONArray jsonArray) {
         ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());
@@ -182,31 +152,12 @@ public class Tweet extends Model implements Parcelable {
                 continue;
             }
 
-            long uid = 0;
-            try {
-                uid = tweetJson.getLong("id");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Tweet existingTweet =
-                    new Select().from(Tweet.class).where("uid = ?", uid).executeSingle();
-            if (existingTweet != null) {
-                // found and return existing
-                continue;
-            } else {
                 Tweet tweet = new Tweet(tweetJson);
-                tweet.save();
+//                tweet.save();
                 Log.d("TWITTER", tweet.getBody());
                 tweets.add(tweet);
-            }
         }
         return tweets;
-    }
-
-    public static Tweet fromCursor(Cursor cursor) {
-        Tweet tweet = new Tweet();
-        tweet.loadFromCursor(cursor);
-        return tweet;
     }
 
     @Override
