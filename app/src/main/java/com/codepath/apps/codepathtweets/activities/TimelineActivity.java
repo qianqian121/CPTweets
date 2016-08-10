@@ -92,4 +92,8 @@ public class TimelineActivity extends AppCompatActivity {
         ComposeFragment composeFragment = ComposeFragment.newInstance();
         composeFragment.show(fm, "fragment_set_filter");
     }
+
+    public void onClickProfile(MenuItem item) {
+
+    }
 }
