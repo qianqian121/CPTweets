@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.codepath.apps.codepathtweets.BR;
 import com.codepath.apps.codepathtweets.R;
 import com.codepath.apps.codepathtweets.models.Tweet;
 import com.codepath.apps.codepathtweets.models.User;
@@ -61,7 +62,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         SimpleTweetViewHolder viewHolder = (SimpleTweetViewHolder) holder;
         viewHolder.tvBody.setText(tweet.getBody());
         User user = tweet.getUser();
-        viewHolder.tvUserName.setText(user.getName());
+//        viewHolder.tvUserName.setText(user.getName());
+        viewHolder.mViewDataBinding.setVariable(BR.user, user);
         viewHolder.tvScreenName.setText("@" + user.getScreeName());
 //        viewHolder.tvTimeLine.setText(tweet.getCreatedAt());
     }

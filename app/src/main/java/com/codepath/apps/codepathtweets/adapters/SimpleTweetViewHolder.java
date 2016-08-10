@@ -1,5 +1,7 @@
 package com.codepath.apps.codepathtweets.adapters;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,10 +27,12 @@ public class SimpleTweetViewHolder extends RecyclerView.ViewHolder {
     TextView tvScreenName;
     @BindView(R.id.tvTimeLine)
     TextView tvTimeLine;
+    //        R.layout.item_tweet
+    ViewDataBinding mViewDataBinding;
 
     public SimpleTweetViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-//        R.layout.item_tweet
+        this.mViewDataBinding = DataBindingUtil.bind(itemView);
     }
 }
