@@ -1,10 +1,12 @@
 package com.codepath.apps.codepathtweets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.codepath.apps.codepathtweets.activities.TimelineActivity;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
@@ -30,6 +32,8 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		// Intent i = new Intent(this, PhotosActivity.class);
 		// startActivity(i);
 		Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(this, TimelineActivity.class);
+		startActivity(intent);
 	}
 
 	// OAuth authentication flow failed, handle the error

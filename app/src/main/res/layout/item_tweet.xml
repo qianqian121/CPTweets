@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <data>
-        <variable name="user" type="com.codepath.apps.simplecptweets.models.User"/>
+        <variable name="user" type="com.codepath.apps.codepathtweets.models.User"/>
     </data>
 
     <RelativeLayout

@@ -38,7 +38,7 @@ public class HomeTimelineFragment extends TweetsListFragment{
                 Log.d("TWITTER", response.toString());
                 List<Tweet> tweets = Tweet.fromJson(response);
                 addAll(tweets);
-                swipeContainer.setRefreshing(false);
+//                swipeContainer.setRefreshing(false);
             }
 
             @Override
