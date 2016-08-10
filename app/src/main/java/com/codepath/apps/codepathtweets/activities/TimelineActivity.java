@@ -34,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // Get the viewpager
         // Set the viewpage adapter for the pager
@@ -94,6 +95,10 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void onClickProfile(MenuItem item) {
+
+    }
+
+    public void onClickMessage(MenuItem item) {
 
     }
 }
