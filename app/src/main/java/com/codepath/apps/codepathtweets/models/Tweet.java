@@ -33,8 +33,17 @@ public class Tweet extends Model implements Parcelable {
         body = in.readString();
         uid = in.readLong();
         userId = in.readLong();
+        user = (User) in.readParcelable(User.class.getClassLoader());
         createdAt = in.readLong();
     }
+
+    /*
+        dest.writeString(this.body);
+        dest.writeLong(this.uid);
+        dest.writeLong(this.userId);
+        dest.writeParcelable(Parcels.wrap(this.user), );
+        dest.writeLong(this.createdAt);
+    * */
 
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
         @Override
@@ -170,6 +179,7 @@ public class Tweet extends Model implements Parcelable {
         dest.writeString(this.body);
         dest.writeLong(this.uid);
         dest.writeLong(this.userId);
+        dest.writeParcelable(this.user, flag);
         dest.writeLong(this.createdAt);
     }
 }
