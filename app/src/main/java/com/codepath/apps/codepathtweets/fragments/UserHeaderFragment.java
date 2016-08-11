@@ -65,8 +65,8 @@ public class UserHeaderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        View view = inflater.inflate(R.layout.fragment_user_header, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 }
