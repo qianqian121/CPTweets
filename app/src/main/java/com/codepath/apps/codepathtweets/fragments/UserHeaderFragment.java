@@ -1,6 +1,7 @@
 package com.codepath.apps.codepathtweets.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,12 +41,16 @@ public class UserHeaderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();    // singleton client
-        populateTimeline();
+//        populateTimeline();
     }
 
-    private void populateTimeline() {
+    public UserHeaderFragment() {
+        this.setArguments(new Bundle());
+    }
+
+    private void populateTimeline(long uid) {
 //        Toast.makeText(getApplicationContext(), "JSON request", Toast.LENGTH_SHORT).show();
-        client.getUserInfo(new JsonHttpResponseHandler() {
+        client.getUserInfo(uid, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
                 Toast.makeText(getActivity(), "JSON success", Toast.LENGTH_SHORT).show();
@@ -68,5 +73,12 @@ public class UserHeaderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_header, container, false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Long uid = getArguments().getLong("uid");
+        populateTimeline(uid);
     }
 }
