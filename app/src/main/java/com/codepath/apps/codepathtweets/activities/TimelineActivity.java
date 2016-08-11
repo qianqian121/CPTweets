@@ -31,7 +31,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     @BindView(R.id.viewpager)
     ViewPager viewpager;
     // Instance of the progress action-view
-    MenuItem miActionProgressItem
+    MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
