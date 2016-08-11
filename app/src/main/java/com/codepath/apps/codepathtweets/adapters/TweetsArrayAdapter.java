@@ -111,7 +111,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void addAll(List<Tweet> tweets) {
-        mTweets.clear();
+//        mTweets.clear();
         mTweets.addAll(tweets);
         notifyDataSetChanged();
     }

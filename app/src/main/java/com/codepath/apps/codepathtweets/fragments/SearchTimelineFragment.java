@@ -6,6 +6,6 @@ package com.codepath.apps.codepathtweets.fragments;
 public class SearchTimelineFragment extends TweetsListFragment {
     @Override
     protected void populateTimeline(long maxId) {
-        
+
     }
 }
