@@ -25,4 +25,6 @@ public class ProfileActivity extends AppCompatActivity {
 //        UserTimelineFragment userTimelineFragment = (UserTimelineFragment) UserTimelineFragment.newInstance("", "");
 //        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
     }
+
+    // fragment call back set actionbar title
 }

@@ -1,4 +1,4 @@
-package com.codepath.apps.simplecptweets.utils;
+package com.codepath.apps.codepathtweets.utils;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;

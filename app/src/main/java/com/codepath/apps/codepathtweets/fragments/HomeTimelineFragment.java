@@ -26,10 +26,10 @@ public class HomeTimelineFragment extends TweetsListFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();    // singleton client
-        populateTimeline();
+        populateTimeline(0);
     }
 
-    private void populateTimeline() {
+    protected void populateTimeline(long maxId) {
 //        Toast.makeText(getApplicationContext(), "JSON request", Toast.LENGTH_SHORT).show();
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
@@ -48,5 +48,4 @@ public class HomeTimelineFragment extends TweetsListFragment{
             }
         });
     }
-
 }

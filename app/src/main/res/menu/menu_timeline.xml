@@ -5,6 +5,14 @@
     tools:context="com.codepath.apps.codepathtweets.activities.TimelineActivity">
 
     <item
+        android:id="@+id/miActionProgress"
+        android:title="Loading..."
+        android:visible="false"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        app:actionLayout="@layout/action_view_progress" />
+
+    <item
         android:id="@+id/miMessage"
         android:orderInCategory="5"
         android:icon="@drawable/ic_email_black_48dp"

@@ -107,7 +107,8 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
-		params.put("screen_name", screenName);
+		if (screenName != null)
+			params.put("screen_name", screenName);
 		// get all tweets from the very beginning
 		client.get(apiUrl, params, handler);
 	}

@@ -1,7 +1,7 @@
 package com.codepath.apps.codepathtweets.fragments;
 
 import android.app.Activity;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,8 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.codepathtweets.R;
+import com.codepath.apps.codepathtweets.activities.DetailActivity;
+import com.codepath.apps.codepathtweets.activities.ProfileActivity;
+import com.codepath.apps.codepathtweets.adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.codepathtweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.codepathtweets.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +29,15 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TweetsListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int REQUEST_CODE = 20;
     @BindView(R.id.rvTweets)
     RecyclerView rvTweets;
 //    R.layout.fragment_tweets_list
@@ -50,23 +54,23 @@ public class TweetsListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TweetsListFragment.
-     */
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @param param1 Parameter 1.
+//     * @param param2 Parameter 2.
+//     * @return A new instance of fragment TweetsListFragment.
+//     */
     // TODO: Rename and change types and number of parameters
-    public static TweetsListFragment newInstance(String param1, String param2) {
-        TweetsListFragment fragment = new TweetsListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static TweetsListFragment newInstance(String param1, String param2) {
+//        TweetsListFragment fragment = new TweetsListFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,46 +93,38 @@ public class TweetsListFragment extends Fragment {
     // interface for parent activity to access adapter add data into adapter
 
     private void setupAdapter() {
-        rvTweets.setAdapter(mTweetsArrayAdapter);
+        mTweetsArrayAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                Tweet tweet = mTweets.get(rvTweets.getChildAdapterPosition(view));
+                intent.putExtra("tweetDetail", Parcels.wrap(tweet));
+                startActivityForResult(intent, REQUEST_CODE);
+                return;
+            }
+        });
 
-//        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
-//            @Override
-//            public void onLoadMore(int page, final int totalItemsCount) {
-//                mCursor.moveToLast();
-//                long maxId = Tweet.fromCursor(mCursor).getUid();
-//                client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
-//                    @Override
-//                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                        Toast.makeText(TimelineActivity.this, "Load more JSON success", Toast.LENGTH_SHORT).show();
-//                        Log.d("TWITTER", response.toString());
-//                        Tweet.fromJson(response);
-////                mTweetCursorAdapter.swapCursor(mCursor);
-//                        mTweetCursorAdapter.notifyDataSetChanged();
-////                        mTweetCursorAdapter.notifyItemRangeChanged(totalItemsCount, mCursor.getCount());
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                        Toast.makeText(TimelineActivity.this, "Load more JSON failure", Toast.LENGTH_SHORT).show();
-//                        Log.d("TWITTER", errorResponse.toString());
-//                    }
-//                });
-//                mTweetCursorAdapter.notifyItemRangeChanged(totalItemsCount, totalItemsCount + 25);
-//                return;
-//            }
-//        });
+        mTweetsArrayAdapter.setOnProfileImageViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
-//        mTweetCursorAdapter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(TimelineActivity.this, DetailActivity.class);
-//                Tweet tweet = Tweet.fromCursor(mTweetCursorAdapter.getCursor(rvTweets.getChildAdapterPosition(view)));
-//                intent.putExtra("tweetDetail", Parcels.wrap(tweet));
-//                startActivityForResult(intent, REQUEST_CODE);
-//                return;
-//            }
-//        });
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, final int totalItemsCount) {
+                Tweet lastTweet = mTweets.get(mTweets.size() - 1);
+                long maxId = lastTweet.getUid();
+                TweetsListFragment.this.populateTimeline(lastTweet.getUid());
+                mTweetsArrayAdapter.notifyItemRangeChanged(totalItemsCount, totalItemsCount + 25);
+                return;
+            }
+        });
     }
+
+    protected abstract void populateTimeline(long maxId);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -144,6 +140,7 @@ public class TweetsListFragment extends Fragment {
 
     private void setupView() {
         rvTweets.setLayoutManager(mLinearLayoutManager);
+        rvTweets.setAdapter(mTweetsArrayAdapter);
         setupAdapter();
 //        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override

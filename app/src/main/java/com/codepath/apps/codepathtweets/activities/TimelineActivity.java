@@ -1,5 +1,6 @@
 package com.codepath.apps.codepathtweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -9,6 +10,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -19,14 +21,17 @@ import com.codepath.apps.codepathtweets.fragments.ComposeFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeDialogListener {
 
+    private static final int REQUEST_CODE = 20;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tabs)
     PagerSlidingTabStrip tabs;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    // Instance of the progress action-view
+    MenuItem miActionProgressItem
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,16 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     public void onClickCompose(MenuItem item) {
         Toast.makeText(getApplicationContext(), "Compose new tweet", Toast.LENGTH_SHORT).show();
         FragmentManager fm = getSupportFragmentManager();
@@ -95,10 +110,27 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void onClickProfile(MenuItem item) {
+        loadProfile();
+    }
 
+    private void loadProfile() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     public void onClickMessage(MenuItem item) {
 
+    }
+
+    @Override
+    public void onFinishEditDialog() {
+        //mTweetCursorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+//            mTweetCursorAdapter.notifyDataSetChanged();
+        }
     }
 }
