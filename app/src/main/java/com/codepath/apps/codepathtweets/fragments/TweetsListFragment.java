@@ -81,6 +81,7 @@ public abstract class TweetsListFragment extends Fragment {
         }
 
         // create adapter
+        mNoMore = false;
         setupContent();
     }
 
@@ -115,10 +116,12 @@ public abstract class TweetsListFragment extends Fragment {
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int page, final int totalItemsCount) {
+                if (mNoMore)
+                    return;
                 mSize = mTweets.size();
                 Tweet lastTweet = mTweets.get(mTweets.size() - 1);
-                long maxId = lastTweet.getUid();
-                TweetsListFragment.this.populateTimeline(lastTweet.getUid());
+                long maxId = lastTweet.getUid() - 1;
+                TweetsListFragment.this.populateTimeline(maxId);
 //                mTweetsArrayAdapter.notifyItemRangeChanged(totalItemsCount, totalItemsCount + 25);
                 return;
             }
@@ -127,7 +130,7 @@ public abstract class TweetsListFragment extends Fragment {
 
     private int mSize;
     protected void notifyItemRangeChanged() {
-        mTweetsArrayAdapter.notifyItemRangeChanged(mSize, mSize + 25);
+//        mTweetsArrayAdapter.notifyItemRangeChanged(mSize, mSize + 25);
     }
 
     protected abstract void populateTimeline(long maxId);
@@ -162,8 +165,12 @@ public abstract class TweetsListFragment extends Fragment {
 //                android.R.color.holo_red_light);
     }
 
+    boolean mNoMore;
     public void addAll(List<Tweet> tweets) {
-        mTweetsArrayAdapter.addAll(tweets);
+        if (tweets.size() < 25)
+            mNoMore = true;
+        if (tweets.size() > 0)
+            mTweetsArrayAdapter.addAll(tweets);
     }
 
     @Override

@@ -55,10 +55,12 @@ public class UserHeaderFragment extends Fragment {
 
     private void populateTimeline(long uid) {
 //        Toast.makeText(getApplicationContext(), "JSON request", Toast.LENGTH_SHORT).show();
+        client.lock();
         client.getUserInfo(uid, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
-                Toast.makeText(getActivity(), "JSON success", Toast.LENGTH_SHORT).show();
+                client.unlock();
+                Toast.makeText(getActivity(), "UserHeaderFragment JSON success", Toast.LENGTH_SHORT).show();
                 User user = User.fromJSON(jsonObject);
                 tvUserName.setText(user.getName());
                 tvScreenName.setText(user.getScreeName());
@@ -69,7 +71,8 @@ public class UserHeaderFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getActivity(), "JSON failure", Toast.LENGTH_SHORT).show();
+                client.unlock();
+                Toast.makeText(getActivity(), "UserHeaderFragment JSON failure", Toast.LENGTH_SHORT).show();
                 Log.d("TWITTER", errorResponse.toString());
             }
         });

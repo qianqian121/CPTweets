@@ -31,10 +31,12 @@ public class HomeTimelineFragment extends TweetsListFragment{
 
     protected void populateTimeline(long maxId) {
 //        Toast.makeText(getApplicationContext(), "JSON request", Toast.LENGTH_SHORT).show();
+        client.lock();
         client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Toast.makeText(getActivity(), "JSON success", Toast.LENGTH_SHORT).show();
+                client.unlock();
+                Toast.makeText(getActivity(), "HomeTimeline Fragment JSON success", Toast.LENGTH_SHORT).show();
                 Log.d("TWITTER", response.toString());
                 List<Tweet> tweets = Tweet.fromJson(response);
                 addAll(tweets);
@@ -43,7 +45,8 @@ public class HomeTimelineFragment extends TweetsListFragment{
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getActivity(), "JSON failure", Toast.LENGTH_SHORT).show();
+                client.unlock();
+                Toast.makeText(getActivity(), "HomeTimeline Fragment JSON failure", Toast.LENGTH_SHORT).show();
                 Log.d("TWITTER", errorResponse.toString());
             }
         });

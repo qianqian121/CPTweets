@@ -9,6 +9,8 @@ import com.loopj.android.http.RequestParams;
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /*
  * 
  * This is the object responsible for communicating with a REST API. 
@@ -144,5 +146,15 @@ public class TwitterClient extends OAuthBaseClient {
 		if (maxId != 0)
 			params.put("max_id", maxId);
 		client.get(apiUrl, params, handler);
+	}
+
+	private final ReentrantLock lock = new ReentrantLock();
+
+	public void lock() {
+		lock.lock();
+	}
+
+	public void unlock() {
+		lock.unlock();
 	}
 }
