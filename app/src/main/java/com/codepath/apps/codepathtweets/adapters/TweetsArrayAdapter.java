@@ -89,6 +89,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         viewHolder.tvScreenName.setText("@" + user.getScreeName());
         viewHolder.tvTimeLine.setText(TimeUtils.timeAgo(new Date(tweet.getCreatedAt())));
         Glide.with(viewHolder.itemView.getContext()).load(user.getProfileImageUrl()).into(viewHolder.ivProfileImage);
+        viewHolder.ivProfileImage.setTag(user.getUid());
         viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

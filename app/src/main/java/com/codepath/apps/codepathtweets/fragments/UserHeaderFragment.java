@@ -62,11 +62,7 @@ public class UserHeaderFragment extends Fragment {
                 client.unlock();
                 Toast.makeText(getActivity(), "UserHeaderFragment JSON success", Toast.LENGTH_SHORT).show();
                 User user = User.fromJSON(jsonObject);
-                tvUserName.setText(user.getName());
-                tvScreenName.setText(user.getScreeName());
-                Glide.with(getActivity()).load(user.getProfileImageUrl()).into(ivProfileImage);
-                tvFollowersCount.setText(user.getFollowersCount() + "  Followers");
-                tvFollowingCount.setText(user.getFollowingsCount() + "  Followings");
+                displayUser(user);
             }
 
             @Override
@@ -76,6 +72,14 @@ public class UserHeaderFragment extends Fragment {
                 Log.d("TWITTER", errorResponse.toString());
             }
         });
+    }
+
+    private void displayUser(User user) {
+        tvUserName.setText(user.getName());
+        tvScreenName.setText(user.getScreeName());
+        Glide.with(getActivity()).load(user.getProfileImageUrl()).into(ivProfileImage);
+        tvFollowersCount.setText(user.getFollowersCount() + "  Followers");
+        tvFollowingCount.setText(user.getFollowingsCount() + "  Followings");
     }
 
     @Override
@@ -90,6 +94,29 @@ public class UserHeaderFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Long uid = getArguments().getLong("uid");
-        populateTimeline(uid);
+        if (uid == 0)
+            getUerInfo();
+        else
+            populateTimeline(uid);
+    }
+
+    private void getUerInfo() {
+        client.lock();
+        client.getUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
+                client.unlock();
+                Toast.makeText(getActivity(), "UserHeaderFragment JSON success", Toast.LENGTH_SHORT).show();
+                User user = User.fromJSON(jsonObject);
+                displayUser(user);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                client.unlock();
+                Toast.makeText(getActivity(), "UserHeaderFragment JSON failure", Toast.LENGTH_SHORT).show();
+                Log.d("TWITTER", errorResponse.toString());
+            }
+        });
     }
 }

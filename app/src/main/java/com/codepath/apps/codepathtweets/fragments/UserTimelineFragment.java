@@ -1,6 +1,7 @@
 package com.codepath.apps.codepathtweets.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,11 +23,16 @@ import cz.msebera.android.httpclient.Header;
 public class UserTimelineFragment extends TweetsListFragment{
     private TwitterClient client;
 
+    public UserTimelineFragment() {
+        this.setArguments(new Bundle());
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();    // singleton client
-        populateTimeline(0);
+//        populateTimeline(0);
+        uid = 0;
     }
 
     // static newInstance
@@ -34,7 +40,7 @@ public class UserTimelineFragment extends TweetsListFragment{
     protected void populateTimeline(long maxId) {
 //        Toast.makeText(getApplicationContext(), "JSON request", Toast.LENGTH_SHORT).show();
         client.lock();
-        client.getUserTimeline(null, new JsonHttpResponseHandler() {
+        client.getUserTimeline(maxId, uid, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 client.unlock();
@@ -53,5 +59,13 @@ public class UserTimelineFragment extends TweetsListFragment{
                 Log.d("TWITTER", errorResponse.toString());
             }
         });
+    }
+
+    long uid;
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        uid = getArguments().getLong("uid");
+        populateTimeline(0);
     }
 }

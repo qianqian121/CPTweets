@@ -109,6 +109,7 @@ public abstract class TweetsListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("userId", (long)view.getTag());
                 startActivity(intent);
             }
         });

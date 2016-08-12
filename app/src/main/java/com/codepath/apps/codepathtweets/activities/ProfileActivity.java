@@ -14,12 +14,16 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        long uid = getIntent().getLongExtra("userId", 0);
 //        UserTimelineFragment userTimelineFragment = (UserTimelineFragment) UserTimelineFragment.newInstance("", "");
 //        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         FragmentManager mgr = this.getSupportFragmentManager();
         Fragment frg = mgr.findFragmentById(R.id.fragmentUserHeader);
         Bundle bdl = frg.getArguments();
-        bdl.putLong("uid", 259074538);
+        bdl.putLong("uid", uid);
+        Fragment fragmentUserTimeline = mgr.findFragmentById(R.id.fragmentUserTimeline);
+        Bundle bundleUserTimeline = fragmentUserTimeline.getArguments();
+        bundleUserTimeline.putLong("uid", uid);
     }
 
     // fragment call back set actionbar title
