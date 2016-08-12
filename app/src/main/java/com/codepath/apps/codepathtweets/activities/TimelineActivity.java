@@ -137,7 +137,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 //            mTweetCursorAdapter.notifyDataSetChanged();
-            Tweet tweet = data.getParcelableExtra("tweet");
+            Tweet tweet = (Tweet) data.getParcelableExtra("replyTweet");
             mFragmentUserTimeline.insert(tweet, 0);
         }
     }

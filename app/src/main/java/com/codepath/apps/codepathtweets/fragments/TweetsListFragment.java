@@ -100,7 +100,7 @@ public abstract class TweetsListFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 Tweet tweet = mTweets.get(rvTweets.getChildAdapterPosition(view));
                 intent.putExtra("tweetDetail", Parcels.wrap(tweet));
-                startActivityForResult(intent, REQUEST_CODE);
+                getActivity().startActivityForResult(intent, REQUEST_CODE);
                 return;
             }
         });
