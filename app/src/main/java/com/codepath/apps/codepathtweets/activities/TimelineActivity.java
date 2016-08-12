@@ -20,6 +20,8 @@ import com.codepath.apps.codepathtweets.fragments.ComposeFragment;
 import com.codepath.apps.codepathtweets.fragments.TweetsListFragment;
 import com.codepath.apps.codepathtweets.models.Tweet;
 
+import org.parceler.Parcels;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -37,6 +39,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     TweetsListFragment mFragmentUserTimeline;
     TweetsListFragment mFragmentHomeTimeline;
+    FragmentManager mgr;
+    TweetsPagerAdapter tweetsPagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,17 +51,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
         // Get the viewpager
         // Set the viewpage adapter for the pager
-        TweetsPagerAdapter tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
         viewpager.setAdapter(tweetsPagerAdapter);
         // Find the pager sliding tabs
         // Attach the pager tabs to the viewpager
         tabs.setViewPager(viewpager);
 
-        FragmentManager mgr = this.getSupportFragmentManager();
+        mgr = this.getSupportFragmentManager();
         mFragmentUserTimeline = (TweetsListFragment) mgr.findFragmentById(R.id.fragmentUserTimeline);
 
-        String tagHomeTimelineFragment = tweetsPagerAdapter.getFragmentTag(R.id.viewpager, 0);
-        mFragmentHomeTimeline = (TweetsListFragment) mgr.findFragmentByTag(tagHomeTimelineFragment);
     }
 
     @Override
@@ -140,16 +142,26 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     @Override
     public void onFinishEditDialog(Intent intent) {
         //mTweetCursorAdapter.notifyDataSetChanged();
-        Tweet tweet = (Tweet) intent.getParcelableExtra("composeTweet");
+        Tweet tweet = (Tweet) Parcels.unwrap(intent.getParcelableExtra("composeTweet"));
+        getHomelineFragment();
         mFragmentHomeTimeline.insert(tweet, 0);
+    }
+
+    private void getHomelineFragment() {
+        if (mFragmentHomeTimeline == null) {
+            String tagHomeTimelineFragment = tweetsPagerAdapter.getFragmentTag(R.id.viewpager, 0);
+            mFragmentHomeTimeline = (TweetsListFragment) mgr.findFragmentByTag(tagHomeTimelineFragment);
+        }
+//        return mFragmentHomeTimeline;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 //            mTweetCursorAdapter.notifyDataSetChanged();
-            Tweet tweet = (Tweet) data.getParcelableExtra("replyTweet");
-            mFragmentUserTimeline.insert(tweet, 0);
+            Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("replyTweet"));
+            getHomelineFragment();
+            mFragmentHomeTimeline.insert(tweet, 0);
         }
     }
 }
