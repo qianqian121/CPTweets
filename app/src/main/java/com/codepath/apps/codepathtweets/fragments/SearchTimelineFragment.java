@@ -10,7 +10,7 @@ import com.codepath.apps.codepathtweets.TwitterClient;
 import com.codepath.apps.codepathtweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -41,20 +41,28 @@ public class SearchTimelineFragment extends TweetsListFragment {
     }
 
     private void populateTimeline(long maxId, String query) {
+        client.lock();
         client.getSearchTimeline(maxId, query, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
+                client.unlock();
                 Toast.makeText(getActivity(), "JSON success", Toast.LENGTH_SHORT).show();
-                Log.d("TWITTER", response.toString());
-                List<Tweet> tweets = Tweet.fromJson(response);
+                Log.d("TWITTER SEARCH", jsonObject.toString());
+                List<Tweet> tweets = null;
+                try {
+                    tweets = Tweet.fromJson(jsonObject.getJSONArray("statuses"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 addAll(tweets);
 //                swipeContainer.setRefreshing(false);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                client.unlock();
                 Toast.makeText(getActivity(), "JSON failure", Toast.LENGTH_SHORT).show();
-                Log.d("TWITTER", errorResponse.toString());
+                Log.d("TWITTER SEARCH", errorResponse.toString());
             }
         });
     }

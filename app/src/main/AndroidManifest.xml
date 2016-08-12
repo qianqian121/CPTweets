@@ -25,11 +25,11 @@
             android:value="1" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.codepath.apps.simplecptweets.models.Tweet, com.codepath.apps.simplecptweets.models.User" />
+            android:value="com.codepath.apps.codepathtweets.models.Tweet, com.codepath.apps.simplecptweets.models.User" />
 
         <provider
             android:name="com.activeandroid.content.ContentProvider"
-            android:authorities="com.codepath.apps.simplecptweets"
+            android:authorities="com.codepath.apps.codepathtweets"
             android:exported="false" />
 
         <activity

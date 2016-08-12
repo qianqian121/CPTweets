@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.codepath.apps.codepathtweets.BR;
 import com.codepath.apps.codepathtweets.R;
 import com.codepath.apps.codepathtweets.models.Tweet;
 import com.codepath.apps.codepathtweets.models.User;
 import com.codepath.apps.codepathtweets.utils.PatternEditableBuilder;
 import com.codepath.apps.codepathtweets.utils.TimeUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
@@ -88,7 +88,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         viewHolder.mViewDataBinding.setVariable(BR.user, user);
         viewHolder.tvScreenName.setText("@" + user.getScreeName());
         viewHolder.tvTimeLine.setText(TimeUtils.timeAgo(new Date(tweet.getCreatedAt())));
-        Glide.with(viewHolder.itemView.getContext()).load(user.getProfileImageUrl()).into(viewHolder.ivProfileImage);
+        Picasso.with(viewHolder.itemView.getContext()).load(user.getProfileImageUrl()).into(viewHolder.ivProfileImage);
         viewHolder.ivProfileImage.setTag(user.getUid());
         viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
