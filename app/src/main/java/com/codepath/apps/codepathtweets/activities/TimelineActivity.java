@@ -17,6 +17,8 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.codepathtweets.R;
 import com.codepath.apps.codepathtweets.adapters.TweetsPagerAdapter;
 import com.codepath.apps.codepathtweets.fragments.ComposeFragment;
+import com.codepath.apps.codepathtweets.fragments.TweetsListFragment;
+import com.codepath.apps.codepathtweets.models.Tweet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +35,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     // Instance of the progress action-view
     MenuItem miActionProgressItem;
 
+    TweetsListFragment mFragmentUserTimeline;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         // Find the pager sliding tabs
         // Attach the pager tabs to the viewpager
         tabs.setViewPager(viewpager);
+
+        FragmentManager mgr = this.getSupportFragmentManager();
+        mFragmentUserTimeline = (TweetsListFragment) mgr.findFragmentById(R.id.fragmentUserTimeline);
     }
 
     @Override
@@ -131,6 +137,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 //            mTweetCursorAdapter.notifyDataSetChanged();
+            Tweet tweet = data.getParcelableExtra("tweet");
+            mFragmentUserTimeline.insert(tweet, 0);
         }
     }
 }

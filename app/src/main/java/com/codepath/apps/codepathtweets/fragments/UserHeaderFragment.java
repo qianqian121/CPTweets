@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.codepathtweets.R;
 import com.codepath.apps.codepathtweets.TwitterApplication;
 import com.codepath.apps.codepathtweets.TwitterClient;
@@ -33,6 +34,10 @@ public class UserHeaderFragment extends Fragment {
     TextView tvUserName;
     @BindView(R.id.tvScreenName)
     TextView tvScreenName;
+    @BindView(R.id.tvFollowersCount)
+    TextView tvFollowersCount;
+    @BindView(R.id.tvFollowingCount)
+    TextView tvFollowingCount;
 //    R.layout.fragment_user_header
     private TwitterClient client;
     // unwrap user parcels
@@ -57,6 +62,9 @@ public class UserHeaderFragment extends Fragment {
                 User user = User.fromJSON(jsonObject);
                 tvUserName.setText(user.getName());
                 tvScreenName.setText(user.getScreeName());
+                Glide.with(getActivity()).load(user.getProfileImageUrl()).into(ivProfileImage);
+                tvFollowersCount.setText(user.getFollowersCount() + "  Followers");
+                tvFollowingCount.setText(user.getFollowingsCount() + "  Followings");
             }
 
             @Override

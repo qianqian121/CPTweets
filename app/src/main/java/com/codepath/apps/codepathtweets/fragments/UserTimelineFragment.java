@@ -40,6 +40,7 @@ public class UserTimelineFragment extends TweetsListFragment{
                 Log.d("TWITTER", response.toString());
                 List<Tweet> tweets = Tweet.fromJson(response);
                 addAll(tweets);
+                notifyItemRangeChanged();
 //                swipeContainer.setRefreshing(false);
             }
 

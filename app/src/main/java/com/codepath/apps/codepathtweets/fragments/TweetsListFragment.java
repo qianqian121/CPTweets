@@ -115,13 +115,19 @@ public abstract class TweetsListFragment extends Fragment {
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int page, final int totalItemsCount) {
+                mSize = mTweets.size();
                 Tweet lastTweet = mTweets.get(mTweets.size() - 1);
                 long maxId = lastTweet.getUid();
                 TweetsListFragment.this.populateTimeline(lastTweet.getUid());
-                mTweetsArrayAdapter.notifyItemRangeChanged(totalItemsCount, totalItemsCount + 25);
+//                mTweetsArrayAdapter.notifyItemRangeChanged(totalItemsCount, totalItemsCount + 25);
                 return;
             }
         });
+    }
+
+    private int mSize;
+    protected void notifyItemRangeChanged() {
+        mTweetsArrayAdapter.notifyItemRangeChanged(mSize, mSize + 25);
     }
 
     protected abstract void populateTimeline(long maxId);
@@ -165,4 +171,8 @@ public abstract class TweetsListFragment extends Fragment {
         super.onAttach(activity);
     }
 
+    public void insert(Tweet tweet, int position) {
+        mTweets.add(0, tweet);
+        mTweetsArrayAdapter.notifyDataSetChanged();
+    }
 }
