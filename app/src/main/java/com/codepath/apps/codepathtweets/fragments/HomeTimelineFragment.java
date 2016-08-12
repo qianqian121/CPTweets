@@ -31,7 +31,7 @@ public class HomeTimelineFragment extends TweetsListFragment{
 
     protected void populateTimeline(long maxId) {
 //        Toast.makeText(getApplicationContext(), "JSON request", Toast.LENGTH_SHORT).show();
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Toast.makeText(getActivity(), "JSON success", Toast.LENGTH_SHORT).show();

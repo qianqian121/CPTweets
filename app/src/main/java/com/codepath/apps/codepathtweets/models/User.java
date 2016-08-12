@@ -13,7 +13,7 @@ import org.json.JSONObject;
  * Created by qiming on 8/2/2016.
  */
 //@Table(name = "users", id = BaseColumns._ID)
-public class User extends Model implements Parcelable {
+public class User implements Parcelable {
     // list attributes
     @Column(name = "name")
     private String name;

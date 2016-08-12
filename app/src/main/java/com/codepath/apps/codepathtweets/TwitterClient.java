@@ -80,7 +80,8 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		// get all tweets from the very beginning
-		params.put("max_id", max_id);
+		if (max_id != 0)
+			params.put("max_id", max_id);
 		client.get(apiUrl, params, handler);
 	}
 
@@ -90,7 +91,8 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", count);
 		// get all tweets from the very beginning
-		params.put("max_id", max_id);
+		if (max_id != 0)
+			params.put("max_id", max_id);
 		client.get(apiUrl, params, handler);
 	}
 
@@ -129,7 +131,8 @@ public class TwitterClient extends OAuthBaseClient {
 	public void getUserTimeline(long uid, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("user_id", String.valueOf(uid));
+		if (uid != 0)
+			params.put("user_id", String.valueOf(uid));
 		client.get(apiUrl, params, handler);
 	}
 

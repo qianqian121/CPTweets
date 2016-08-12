@@ -22,7 +22,7 @@ import java.util.Locale;
 
 // Parse the JSON + store the data, encapsulate state logic or display logic
 //@Table(name = "tweets", id = BaseColumns._ID)
-public class Tweet extends Model implements Parcelable {
+public class Tweet implements Parcelable {
     // list out the attributes
     @Column(name = "body")
     private String body;
@@ -74,7 +74,7 @@ public class Tweet extends Model implements Parcelable {
 //    inputFormat.setLenient(true);
 
     public Tweet(JSONObject object) {
-        super();
+//        super();
 
         try {
 //            this.userId = object.getString("user_id");
