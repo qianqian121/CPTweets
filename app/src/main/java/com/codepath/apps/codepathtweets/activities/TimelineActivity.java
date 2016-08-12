@@ -36,6 +36,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     MenuItem miActionProgressItem;
 
     TweetsListFragment mFragmentUserTimeline;
+    TweetsListFragment mFragmentHomeTimeline;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +47,17 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
         // Get the viewpager
         // Set the viewpage adapter for the pager
-        viewpager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        TweetsPagerAdapter tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        viewpager.setAdapter(tweetsPagerAdapter);
         // Find the pager sliding tabs
         // Attach the pager tabs to the viewpager
         tabs.setViewPager(viewpager);
 
         FragmentManager mgr = this.getSupportFragmentManager();
         mFragmentUserTimeline = (TweetsListFragment) mgr.findFragmentById(R.id.fragmentUserTimeline);
+
+        String tagHomeTimelineFragment = tweetsPagerAdapter.getFragmentTag(R.id.viewpager, 0);
+        mFragmentHomeTimeline = (TweetsListFragment) mgr.findFragmentByTag(tagHomeTimelineFragment);
     }
 
     @Override
@@ -80,6 +85,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();
+
+                Intent intent = new Intent(TimelineActivity.this, SearchActivity.class);
+                intent.putExtra("query", query);
+                startActivity(intent);
                 return true;
             }
 
@@ -129,8 +138,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     }
 
     @Override
-    public void onFinishEditDialog() {
+    public void onFinishEditDialog(Intent intent) {
         //mTweetCursorAdapter.notifyDataSetChanged();
+        Tweet tweet = (Tweet) intent.getParcelableExtra("composeTweet");
+        mFragmentHomeTimeline.insert(tweet, 0);
     }
 
     @Override

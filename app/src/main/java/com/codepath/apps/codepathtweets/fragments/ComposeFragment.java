@@ -1,6 +1,7 @@
 package com.codepath.apps.codepathtweets.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -19,6 +20,7 @@ import com.codepath.apps.codepathtweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +38,7 @@ public class ComposeFragment extends DialogFragment {
     ComposeDialogListener mComposeDialogListener;
 
     public interface ComposeDialogListener {
-        void onFinishEditDialog();
+        void onFinishEditDialog(Intent intent);
     }
 
     @Override
@@ -65,12 +67,12 @@ public class ComposeFragment extends DialogFragment {
                 client.postUpdate(body, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                        Intent resultIntent = new Intent();
-                        Tweet.fromJSON(response);
-//                resultIntent.putExtra("compose", Tweet.fromJSON(tweetJSON));
+                        Intent resultIntent = new Intent();
+                        Tweet tweet = Tweet.fromJSON(response);
+                        resultIntent.putExtra("composeTweet", Parcels.wrap(tweet));
 //                        setResult(Activity.RESULT_OK, resultIntent);
 //                        finish();
-                        mComposeDialogListener.onFinishEditDialog();
+                        mComposeDialogListener.onFinishEditDialog(resultIntent);
                         dismiss();
                     }
 

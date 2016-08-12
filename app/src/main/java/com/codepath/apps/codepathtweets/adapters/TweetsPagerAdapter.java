@@ -38,4 +38,8 @@ public class TweetsPagerAdapter extends FragmentPagerAdapter {
         return tabTitles[position];
     }
 
+    public String getFragmentTag(int viewPagerId, int fragmentPosition)
+    {
+        return "android:switcher:" + viewPagerId + ":" + fragmentPosition;
+    }
 }

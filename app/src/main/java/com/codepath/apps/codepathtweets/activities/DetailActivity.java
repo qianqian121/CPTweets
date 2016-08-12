@@ -85,8 +85,8 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         Intent resultIntent = new Intent();
-                        Tweet.fromJSON(response);
-                        resultIntent.putExtra("replyTweet", Tweet.fromJSON(response));
+                        Tweet tweet = Tweet.fromJSON(response);
+                        resultIntent.putExtra("replyTweet", Parcels.wrap(tweet));
                         setResult(Activity.RESULT_OK, resultIntent);
                         finish();
                     }
