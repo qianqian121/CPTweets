@@ -37,7 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivProfileImage"
+        android:layout_below="@+id/tvTagline"
+        android:layout_marginTop="10dp"
         android:layout_alignParentEnd="true">
 
         <TextView
@@ -53,4 +54,12 @@
             android:id="@+id/tvFollowingCount"
             android:layout_marginLeft="20dp"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tag line"
+        android:id="@+id/tvTagline"
+        android:layout_below="@+id/tvScreenName"
+        android:layout_alignStart="@+id/tvScreenName" />
 </RelativeLayout>

@@ -38,6 +38,8 @@ public class UserHeaderFragment extends Fragment {
     TextView tvFollowersCount;
     @BindView(R.id.tvFollowingCount)
     TextView tvFollowingCount;
+    @BindView(R.id.tvTagline)
+    TextView tvTagline;
 //    R.layout.fragment_user_header
     private TwitterClient client;
     // unwrap user parcels
@@ -78,6 +80,7 @@ public class UserHeaderFragment extends Fragment {
         tvUserName.setText(user.getName());
         tvScreenName.setText(user.getScreeName());
         Glide.with(getActivity()).load(user.getProfileImageUrl()).into(ivProfileImage);
+        tvTagline.setText(user.getTagline());
         tvFollowersCount.setText(user.getFollowersCount() + "  Followers");
         tvFollowingCount.setText(user.getFollowingsCount() + "  Followings");
     }
